@@ -295,8 +295,8 @@ const VideoPlayer = () => {
     const videoContainerPreview = document.querySelector('.video-container__preview')
     videoContainerPreview.addEventListener('loadedmetadata', () =>
     {
-        videoContainerPreview.width = videoContainerPreview.videoWidth / 10
-        videoContainerPreview.height = videoContainerPreview.videoHeight / 10
+        videoContainerPreview.width = videoContainerPreview.videoWidth / 15
+        videoContainerPreview.height = videoContainerPreview.videoHeight / 15
     })
 
     //Preview Video To Preview Layer
@@ -306,7 +306,6 @@ const VideoPlayer = () => {
     //Xu ly preview layer di chuyen theo chuot
     const timeController = document.querySelector('.time-controller')
     const videoPreviewLayer = document.querySelector('.video-preview-layer')
-    const imageVideoPreview = document.querySelector('.video-preview-layer__image')
     timeController.addEventListener('mousemove', e => {
         videoPreviewLayer.style.display = 'block'
         if (e.offsetX - 10 < videoPreviewLayer.offsetWidth / 2) {
@@ -321,12 +320,19 @@ const VideoPlayer = () => {
         let percent = (e.offsetX / timeController.offsetWidth)
         let previewTime = percent * videoContainerPreview.duration
         videoContainerPreview.currentTime = previewTime
-        context.drawImage(videoContainerPreview, 0, 0, videoContainerPreview.width, videoContainerPreview.height);
-        imageVideoPreview.src = canvas.toDataURL()
     })
 
     timeController.addEventListener('mouseout', e => {
         videoPreviewLayer.style.display = 'none'
+    })
+
+    videoContainerPreview.addEventListener('seeked', () => {
+        context.drawImage(videoContainerPreview, 0, 0, videoContainerPreview.width, videoContainerPreview.height);
+        const previewImage = new Image()
+        previewImage.src = canvas.toDataURL()
+        previewImage.className = 'video-preview-layer__image'
+        videoPreviewLayer.innerHTML = ''
+        videoPreviewLayer.appendChild(previewImage)
     })
 
     //Xy ly end video
