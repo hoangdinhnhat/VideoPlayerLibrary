@@ -293,14 +293,11 @@ const VideoPlayer = () => {
 
     //Xu ly size Preview Video
     const videoContainerPreview = document.querySelector('.video-container__preview')
-    videoContainerPreview.addEventListener('loadedmetadata', () =>
-    {
-        videoContainerPreview.width = videoContainerPreview.videoWidth / 15
-        videoContainerPreview.height = videoContainerPreview.videoHeight / 15
-    })
+    videoContainerPreview.width = videoContainerPreview.videoWidth / 15
+    videoContainerPreview.height = videoContainerPreview.videoHeight / 15
 
     //Preview Video To Preview Layer
-    const canvas = document.createElement('canvas')
+    const canvas = document.querySelector('.video-preview-layer__image')
     const context = canvas.getContext('2d');
 
     //Xu ly preview layer di chuyen theo chuot
@@ -315,8 +312,6 @@ const VideoPlayer = () => {
         } else {
             videoPreviewLayer.style.left = 10 + e.offsetX - videoPreviewLayer.offsetWidth / 2 + 'px'
         }
-        canvas.width = videoContainerPreview.width
-        canvas.height = videoContainerPreview.height
         let percent = (e.offsetX / timeController.offsetWidth)
         let previewTime = percent * videoContainerPreview.duration
         videoContainerPreview.currentTime = previewTime
@@ -327,12 +322,9 @@ const VideoPlayer = () => {
     })
 
     videoContainerPreview.addEventListener('seeked', () => {
+        canvas.width = videoContainerPreview.width
+        canvas.height = videoContainerPreview.height
         context.drawImage(videoContainerPreview, 0, 0, videoContainerPreview.width, videoContainerPreview.height);
-        const previewImage = new Image()
-        previewImage.src = canvas.toDataURL()
-        previewImage.className = 'video-preview-layer__image'
-        videoPreviewLayer.innerHTML = ''
-        videoPreviewLayer.appendChild(previewImage)
     })
 
     //Xy ly end video
@@ -369,9 +361,6 @@ const VideoPlayer = () => {
 
     })
 }
-
-VideoPlayer()
-
 
 const videoStarter = document.querySelector('.overlay-before__play')
 const overlayBefore = document.querySelector('.overlay-before')
